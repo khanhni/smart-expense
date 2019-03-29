@@ -4,7 +4,7 @@ const cryptr = new Cryptr("chiakhoa");
 
 const Schema = mongoose.Schema;
 
-export const UserSchema = new Schema({
+const UserSchema = new Schema({
     userName:{
         type:String,
         required:'Enter username'
@@ -42,16 +42,21 @@ export const UserSchema = new Schema({
 //       throw new Error('Hashing failed', error)
 //     }
 //   }
-export function hashPassword(password){
+function hashPassword(password){
     var passwordHash = require('password-hash');
     return passwordHash.generate(password);
 }
 
-export function enc(data){
+function enc(data){
     return cryptr.encrypt(data);
 }
 
-export function dec(hash){
+function dec(hash){
     return  cryptr.decrypt(hash);
 }
+module.exports = UserSchema;
+module.exports = hashPassword;
+module.exports = enc;
+module.exports = dec;
+module.exports = Schema;
 

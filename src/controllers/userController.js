@@ -4,7 +4,7 @@ const {UserSchema,hashPassword,enc,dec} = require('../models/userModel');
 const User = mongoose.model('User', UserSchema);
 
 
-export const signUp = (req,res)=>{
+const signUp = (req,res)=>{
     req.body.passWord = hashPassword(req.body.passWord);
     req.body.income = enc(req.body.income);
     let newUser = new User(req.body);
@@ -23,7 +23,7 @@ export const signUp = (req,res)=>{
         )
     })
 };
-export const logIn =(req,res)=>{
+const logIn =(req,res)=>{
     var passwordHash = require('password-hash');
     let checkUser = new User(req.body);
     User.findOne({'userName':`${req.body.userName}`},(err,usr)=>{
@@ -36,5 +36,8 @@ export const logIn =(req,res)=>{
     }
     })
 };
+module.exports = signUp;
+module.exports = logIn;
+module.exports = User;
 
 
