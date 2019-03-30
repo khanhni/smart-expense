@@ -1,7 +1,5 @@
-import Cryptr from "cryptr";
-const mongoose = require("mongoose");
-// const Cryptr = require("cryptr");
-const cryptrVar = new Cryptr("chiakhoa");
+var CryptoJS = require("crypto-js");
+import mongoose from "mongoose"
 
 const Schema = mongoose.Schema;
 
@@ -49,10 +47,11 @@ export function hashPassword(password){
 }
 
 export function enc(data){
-    return cryptrVar.encrypt(data);
+    return CryptoJS.AES.encrypt(data, 'chiakhoa');
 }
 
 export function dec(hash){
-    return  cryptrVar.decrypt(hash);
+    var bytes  = CryptoJS.AES.decrypt(hash, 'chiakhoa');
+    return  bytes.toString(CryptoJS.enc.Utf8);
 }
 

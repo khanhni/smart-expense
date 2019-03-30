@@ -7,5 +7,4 @@ const routes = (app)=>{
     app.route('/login')
     .post(logIn);
 };
-module.exports = routes;
-// export default routes;
+export default routes;
