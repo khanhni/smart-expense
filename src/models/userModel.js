@@ -57,6 +57,6 @@ module.exports = UserSchema;
 module.exports = hashPassword;
 module.exports = enc;
 module.exports = dec;
-module.exports = mongoose.model('User', UserSchema);
+
 
 

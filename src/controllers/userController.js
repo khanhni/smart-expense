@@ -1,12 +1,13 @@
 const mongoose = require("mongoose");
 const {hashPassword,enc,dec} = require("../models/userModel");
-const {UserSchema} = require("../models/userModel");
-const User = mongoose.model('User',UserSchema);
+const UserSchema = require("../models/userModel");
+// import {UserSchema} from "../models/userModel"
+const Users = mongoose.model('User',UserSchema);
 
 const signUp = (req,res)=>{
     req.body.passWord = hashPassword(req.body.passWord);
     req.body.income = enc(req.body.income);
-    let newUser = new User(req.body);
+    let newUser = new Users(req.body);
     User.findOne({'userName':`${req.body.userName}`},(err,usr)=>{
         if(usr){
             res.json({'message':'Username exsit, please enter other one'})
@@ -24,7 +25,7 @@ const signUp = (req,res)=>{
 };
 const logIn =(req,res)=>{
     var passwordHash = require('password-hash');
-    let checkUser = new User(req.body);
+    let checkUser = new Users(req.body);
     User.findOne({'userName':`${req.body.userName}`},(err,usr)=>{
         if(passwordHash.verify(req.body.passWord,usr.passWord)){
             usr.income = dec(usr.income);
