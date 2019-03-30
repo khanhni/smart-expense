@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const {hashPassword,enc,dec} = require("../models/userModel");
-const UserSchema = require("../models/userModel");
+const {UserSchema} = require("../models/userModel");
 const User = mongoose.model('User',UserSchema);
 
 const signUp = (req,res)=>{
