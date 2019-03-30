@@ -1,9 +1,8 @@
 var CryptoJS = require("crypto-js");
-import mongoose from "mongoose"
-
+const mongoose = require("mongoose")
 const Schema = mongoose.Schema;
 
-export const UserSchema = new Schema({
+const UserSchema = new Schema({
     userName:{
         type:String,
         required:'Enter username'
@@ -41,17 +40,23 @@ export const UserSchema = new Schema({
 //       throw new Error('Hashing failed', error)
 //     }
 //   }
-export function hashPassword(password){
+function hashPassword(password){
     var passwordHash = require('password-hash');
     return passwordHash.generate(password);
 }
 
-export function enc(data){
+function enc(data){
     return CryptoJS.AES.encrypt(data, 'chiakhoa');
 }
 
-export function dec(hash){
+function dec(hash){
     var bytes  = CryptoJS.AES.decrypt(hash, 'chiakhoa');
     return  bytes.toString(CryptoJS.enc.Utf8);
 }
+module.exports = UserSchema;
+module.exports = hashPassword;
+module.exports = enc;
+module.exports = dec;
+module.exports = mongoose.model('User', UserSchema);
+
 

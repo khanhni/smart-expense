@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 // const routes = require("./src/routes/userRoute");
-import routes from "./src/routes/userRoute"
+const routes = require("./src/routes/userRoute");
 // import routes from "./src/routes/userRoute"
 const PORT =  process.env.PORT || 3000;
 const app = express();
