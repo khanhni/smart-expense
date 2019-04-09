@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 // const {UserSchema} = require("../models/userModel");
 // // import {UserSchema} from "../models/userModel"
 // const Users = mongoose.model('User',UserSchema);
-var CryptoJS = require("crypto-js");
+// var CryptoJS = require("crypto-js");
 // const mongoose = require("mongoose")
 const Schema = mongoose.Schema;
 
@@ -17,12 +17,20 @@ const UserSchema = new Schema({
         required:'Enter password'
     },
     income:{
-        type:String,
+        type:Number,
         required:'Enter income'
     },
     saving:{
         type:Number,
         required:'Enter saving amount,20% by default'
+    },
+    address:{
+        type:String,
+        required:'Enter address'
+    },
+    phone:{
+        type:String,
+        required:'Enter phone number'
     },
     created_date:{
         type:Date,
@@ -50,14 +58,14 @@ function hashPassword(password){
     return passwordHash.generate(password);
 }
 
-function enc(data){
-    return CryptoJS.AES.encrypt(data, 'chiakhoa');
-}
+// function enc(data){
+//     return CryptoJS.AES.encrypt(data, 'chiakhoa');
+// }
 
-function dec(hash){
-    var bytes  = CryptoJS.AES.decrypt(hash, 'chiakhoa');
-    return  bytes.toString(CryptoJS.enc.Utf8);
-}
+// function dec(hash){
+//     var bytes  = CryptoJS.AES.decrypt(hash, 'chiakhoa');
+//     return  bytes.toString(CryptoJS.enc.Utf8);
+// }
 // module.exports = {UserSchema};
 // module.exports = hashPassword;
 // module.exports = enc;
@@ -68,7 +76,7 @@ const User = mongoose.model('User',UserSchema);
 
 exports.signUp = (req,res)=>{
     req.body.passWord = hashPassword(req.body.passWord);
-    req.body.income = enc(req.body.income);
+    // req.body.income = enc(req.body.income);
     let newUser = new User(req.body);
     User.findOne({'userName':`${req.body.userName}`},(err,usr)=>{
         if(usr){
@@ -90,7 +98,7 @@ exports.logIn =(req,res)=>{
     let checkUser = new User(req.body);
     User.findOne({'userName':`${req.body.userName}`},(err,usr)=>{
         if(passwordHash.verify(req.body.passWord,usr.passWord)){
-            usr.income = dec(usr.income);
+            // usr.income = dec(usr.income);
             res.json(usr);
         }
         else{
@@ -98,6 +106,24 @@ exports.logIn =(req,res)=>{
     }
     })
 };
+
+exports.updateProfile=(req,res)=>{
+    // req.body.income = enc(req.body.income);
+    req.body.passWord = hashPassword(req.body.passWord);
+    User.findOneAndUpdate({_id: req.params.userId},req.body,{new:true },(err,usr)=>{    
+        if(err){
+            res.send(err);
+        }
+        else if(req.body.saving<20){
+        res.json({'message':'The saving cannot be less than 20%, please enter again !!'});
+        }
+        else{
+        // usr.income=dec(usr.income)
+        res.json(usr);
+        }
+    }
+    );
+}
 
 
 
