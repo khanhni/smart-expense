@@ -32,11 +32,43 @@ const UserSchema = new Schema({
         type:String,
         required:'Enter phone number'
     },
+    expenseIDlist:{
+        type:[],
+        required:'Enter list of catagories id'
+    },
     created_date:{
         type:Date,
         default:Date.now
     }
 });
+
+const ExpenseSchema = new Schema({
+    foodOdrink:{
+        type:Number,
+        required:'Enter food or drink expensed'
+    },
+    transportation:{
+        type:Number,
+        required:'Enter transportation expensed'
+    },
+    shopping:{
+        type:Number,
+        required:'Enter shopping expensed'
+    },
+    total:{
+        type:Number,
+        required:'Enter total expensed'
+    },
+    userId:{
+        type:String,
+        required:'Enter userID'
+    },
+    created_date:{
+        type:Date,
+        default:Date.now
+    }
+});
+
 // export function hashPassword(password){
 //     try {
 //         const salt = bcrypt.genSalt(10)
@@ -73,6 +105,7 @@ function hashPassword(password){
 
 
 const User = mongoose.model('User',UserSchema);
+const Expense = mongoose.model('Expense',ExpenseSchema)
 
 exports.signUp = (req,res)=>{
     req.body.passWord = hashPassword(req.body.passWord);
@@ -97,13 +130,16 @@ exports.logIn =(req,res)=>{
     var passwordHash = require('password-hash');
     let checkUser = new User(req.body);
     User.findOne({'userName':`${req.body.userName}`},(err,usr)=>{
-        if(passwordHash.verify(req.body.passWord,usr.passWord)){
+        if(usr==null){
+            res.json({'message':'Invalid, please try again'});
+        }
+        else if(passwordHash.verify(req.body.passWord,usr.passWord)){
             // usr.income = dec(usr.income);
             res.json(usr);
         }
-        else{
-        res.json({'message':'Invalid, please try again'});
-    }
+    //     else if(!usr){
+    //     res.json({'message':'Invalid, please try again'});
+    // }
     })
 };
 
@@ -124,6 +160,19 @@ exports.updateProfile=(req,res)=>{
     }
     );
 }
+
+exports.createExpense=(req,res)=>{
+    let newExpense = new Expense(req.body);
+    // User.update({_id:`${req.body.userId}`},{ $push: {expenseIDlist:["sdad"]}});
+    newExpense.save((err,exp)=>{
+        if(err){
+            res.send(err);
+        }
+        else{
+           res.json(exp);
+        }
+    })
+};
 
 
 

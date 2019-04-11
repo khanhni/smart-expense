@@ -1,4 +1,4 @@
-const {signUp, logIn,updateProfile} = require("../controllers/userController");
+const {signUp, logIn,updateProfile,createExpense} = require("../controllers/userController");
 
 const routes = (app)=>{
     app.route('/signup')
@@ -9,5 +9,8 @@ const routes = (app)=>{
 
     app.route('/updateProfile/:userId')
     .put(updateProfile);
+
+    app.route('/addExpense')
+    .post(createExpense);
 };
 module.exports= routes;
