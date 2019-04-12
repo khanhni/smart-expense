@@ -120,6 +120,12 @@ exports.signUp = (req,res)=>{
                     res.send(err);
                 }
                 else{
+                // var humandate = newUser.aggregate([{
+                //     $project:{
+                //         yearMonthDayUTC: { $dateToString: { format: "%Y-%m-%d", date: "$created_date" } },
+                //     }
+                // }]);
+                // console.lo    
                 res.json({'message':'Signup successfull!!'});
                 }
             })
@@ -173,6 +179,24 @@ exports.createExpense=(req,res)=>{
         }
     })
 };
+
+exports.getExpenseByDate=(req,res)=>{
+    Expense.find({$and:[
+        {"userId":`${req.body.userId}`},
+        {"created_date":{$gte:`${req.params.date}T00:00:00.000Z`,
+                        $lt:`${req.params.date}T23:59:59.999Z`}}
+                    ]},
+            (err,exp)=>{
+                if(err){
+                    res.send(err);
+                }
+                else{
+                   res.json(exp);
+                }     
+            }
+    )
+
+}
 
 
 
