@@ -142,6 +142,8 @@ exports.logIn =(req,res)=>{
         else if(passwordHash.verify(req.body.passWord,usr.passWord)){
             // usr.income = dec(usr.income);
             res.json(usr);
+        }else{
+            res.json({'message':'Invalid, please try again'});
         }
     //     else if(!usr){
     //     res.json({'message':'Invalid, please try again'});
@@ -195,7 +197,10 @@ exports.getExpenseByDate=(req,res)=>{
                 }     
             }
     )
+};
 
+exports.updateExpense=(req,res)=>{
+    Expense.findOneAndUpdate({_id:req.body._id})
 }
 
 
