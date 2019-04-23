@@ -1,4 +1,4 @@
-const {signUp, logIn,updateProfile,createExpense, getExpenseByDate} = require("../controllers/userController");
+const {signUp, logIn,updateProfile,createExpense, getExpenseByDate,updateExpense} = require("../controllers/userController");
 
 const routes = (app)=>{
     app.route('/signup')
@@ -15,5 +15,9 @@ const routes = (app)=>{
 
     app.route('/getExpenseByDate/:date')
     .get(getExpenseByDate);
+
+    app.route('/updateExpense/:expenseId')
+    .put(updateExpense);
+
 };
 module.exports= routes;

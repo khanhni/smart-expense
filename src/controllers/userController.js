@@ -136,7 +136,7 @@ exports.logIn =(req,res)=>{
     var passwordHash = require('password-hash');
     let checkUser = new User(req.body);
     User.findOne({'userName':`${req.body.userName}`},(err,usr)=>{
-        if(usr==null){
+        if(!usr){
             res.json({'message':'Invalid, please try again'});
         }
         else if(passwordHash.verify(req.body.passWord,usr.passWord)){
@@ -182,6 +182,7 @@ exports.createExpense=(req,res)=>{
     })
 };
 
+
 exports.getExpenseByDate=(req,res)=>{
     Expense.find({$and:[
         {"userId":`${req.body.userId}`},
@@ -200,7 +201,13 @@ exports.getExpenseByDate=(req,res)=>{
 };
 
 exports.updateExpense=(req,res)=>{
-    Expense.findOneAndUpdate({_id:req.body._id})
+    Expense.findOneAndUpdate({_id:req.params.expenseId},req.body,{new:true},(err,ex)=>{
+        if(err){
+            res.send(err)
+        }else{
+            res.json(ex)
+        }
+    })
 }
 
 
