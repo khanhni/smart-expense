@@ -14,7 +14,7 @@ const routes = (app)=>{
     .post(createExpense);
 
     app.route('/getExpenseByDate/:date')
-    .get(getExpenseByDate);
+    .post(getExpenseByDate);
 
     app.route('/updateExpense/:expenseId')
     .put(updateExpense);
