@@ -200,6 +200,43 @@ exports.getExpenseByDate=(req,res)=>{
     )
 };
 
+exports.overExpenseChecking=(req,res)=>{
+    // Expense.aggregate(  [
+    //     {
+    //        $project:
+    //          {
+    //            _id: 0,
+    //         //    foodOdrink:1,
+    //         //    transportation:1,
+    //         //    shopping:1,
+    //         //    total:1,
+    //            exceed:
+    //              {
+    //                $cond: { if: { $gte: [ "$total", req.body.average ]}, then: -1, else: 1 }
+    //              }
+    //          }
+    //     }
+    //  ],(err,s)=>{
+    //                     if(err){
+    //                         res.send(err);
+    //                     }
+    //                     else{
+    //                         res.json(s);
+    //                     }
+    //                 })
+    Expense.find({_id:req.body.expId,total:{$gte:req.body.average}},(err,s)=>{
+        if(err){
+            res.send(err);
+        }
+        else{
+            res.json(s);
+        }
+    })
+}
+
+
+
+
 exports.updateExpense=(req,res)=>{
     Expense.findOneAndUpdate({_id:req.params.expenseId},req.body,{new:true},(err,ex)=>{
         if(err){
@@ -209,6 +246,7 @@ exports.updateExpense=(req,res)=>{
         }
     })
 }
+
 
 
 
