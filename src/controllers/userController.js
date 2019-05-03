@@ -1,3 +1,6 @@
+var date = new Date(Date.now());
+var month = date.getMonth();
+var year = date.getFullYear();
 const mongoose = require("mongoose");
 // const {hashPassword,enc,dec} = require("../models/userModel");
 // const {UserSchema} = require("../models/userModel");
@@ -66,6 +69,14 @@ const ExpenseSchema = new Schema({
     created_date:{
         type:Date,
         default:Date.now
+    },
+    month:{
+        type:String,
+        default:month+1
+    },
+    year:{
+        type:String,
+        default:year
     }
 });
 
@@ -246,6 +257,105 @@ exports.updateExpense=(req,res)=>{
         }
     })
 }
+
+exports.monthlyStatistic=(req,res)=>{
+    Expense.aggregate([{$match:{    
+        "userId":`${req.body.userId}`,
+        "month":`${req.body.month}`,
+        "year":`${req.body.year}`
+    }},{
+        
+        $group:{
+            _id:{
+            "month":`${req.body.month}`},
+            foodOdrink:{$sum:"$foodOdrink"},
+            transportation:{$sum:"$transportation"},
+            shopping:{$sum:"$shopping"}
+        }
+    },
+        {
+          $project: {
+            totalFoodNDrink: { $sum: "$foodOdrink"},
+            totalTransport: { $sum: "$transportation" },
+            totalShopping: { $sum: [ "$shopping" ] }
+          }
+        }
+     ],
+       (err,exp)=>{
+           if(err){
+               res.send(err)
+           }
+           else{
+               res.json(exp)
+           }
+       }                                 
+                    )
+}
+
+exports.expStatisticByMonth=(req,res)=>{
+    Expense.aggregate([{$match:{    
+        "userId":`${req.body.userId}`,
+        "year":`${req.body.year}`
+    }},{
+        
+        $group:{
+            _id:{
+            "month":"$month"},
+            foodOdrink:{$sum:"$foodOdrink"},
+            transportation:{$sum:"$transportation"},
+            shopping:{$sum:"$shopping"}
+        }
+    },
+        {
+          $project: {
+            totalFoodNDrink: { $sum: "$foodOdrink"},
+            totalTransport: { $sum: "$transportation" },
+            totalShopping: { $sum: [ "$shopping" ] }
+          }
+        }
+     ],
+       (err,exp)=>{
+           if(err){
+               res.send(err)
+           }
+           else{
+               res.json(exp)
+           }
+       }                                 
+                    )
+}
+exports.savingStatisticByMonth=(req,res)=>{
+    var salary=req.body.income;
+    var salaryInt = parseInt(salary,10)
+    Expense.aggregate([{$match:{    
+        "userId":`${req.body.userId}`,
+        "year":`${req.body.year}`
+    }},{
+        
+        $group:{
+            _id:{
+            "month":"$month"},
+            total:{$sum:"$total"}
+        }
+    },
+        {
+          $project: {
+            savingAmout:{$subtract:[salaryInt,{$sum:"$total"}]}
+          }
+        }
+     ],
+       (err,exp)=>{
+           if(err){
+               res.send(err)
+           }
+           else{
+               res.json(exp)
+           }
+       }                                 
+                    )
+}
+
+
 
 
 
