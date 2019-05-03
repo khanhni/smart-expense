@@ -1,5 +1,13 @@
 var date = new Date(Date.now());
+var datee = date.getDate();
+if(datee<10){
+    datee=`0${datee}`
+}
 var month = date.getMonth();
+var trueMonth = month+1;
+if(trueMonth<10){
+    month=`0${trueMonth}`
+}
 var year = date.getFullYear();
 const mongoose = require("mongoose");
 // const {hashPassword,enc,dec} = require("../models/userModel");
@@ -72,7 +80,7 @@ const ExpenseSchema = new Schema({
     },
     month:{
         type:String,
-        default:month+1
+        default:trueMonth
     },
     year:{
         type:String,
@@ -353,6 +361,23 @@ exports.savingStatisticByMonth=(req,res)=>{
            }
        }                                 
                     )
+}
+exports.checkExpenseExist=(req,res)=>{
+    Expense.find({$and:[
+        {"userId":`${req.body.userId}`},
+        {"created_date":{$gte:`${year}-${month}-${datee}T00:00:00.000Z`,
+                        $lt:`${year}-${month}-${datee}T23:59:59.999Z`}}
+                    ]},
+            (err,exp)=>{
+                if(err){
+                    res.send(err);
+                }
+                else{
+                   res.json(exp);
+                }     
+            }
+    )
+
 }
 
 

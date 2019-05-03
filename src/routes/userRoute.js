@@ -7,7 +7,8 @@ const {signUp,
     overExpenseChecking,
     expStatisticByMonth,
     monthlyStatistic,
-    savingStatisticByMonth} = require("../controllers/userController");
+    savingStatisticByMonth,
+    checkExpenseExist} = require("../controllers/userController");
 
 const routes = (app)=>{
     app.route('/signup')
@@ -39,6 +40,9 @@ const routes = (app)=>{
 
     app.route('/savingStatistic')
     .post(savingStatisticByMonth)
+
+    app.route('/checkExpenseExist')
+    .post(checkExpenseExist )
     
 };
 module.exports= routes;
