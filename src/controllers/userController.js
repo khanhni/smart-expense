@@ -170,9 +170,25 @@ exports.logIn =(req,res)=>{
     })
 };
 
-exports.updateProfile=(req,res)=>{
+exports.updatePassword=(req,res)=>{
     // req.body.income = enc(req.body.income);
     req.body.passWord = hashPassword(req.body.passWord);
+    User.findOneAndUpdate({_id: req.params.userId},req.body,{new:true },(err,usr)=>{    
+        if(err){
+            res.send(err);
+        }
+        else if(req.body.saving<20){
+        res.json({'message':'The saving cannot be less than 20%, please enter again !!'});
+        }
+        else{
+        // usr.income=dec(usr.income)
+        res.json(usr);
+        }
+    }
+    );
+}
+
+exports.updateOthers=(req,res)=>{
     User.findOneAndUpdate({_id: req.params.userId},req.body,{new:true },(err,usr)=>{    
         if(err){
             res.send(err);

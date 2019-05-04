@@ -1,6 +1,6 @@
 const {signUp, 
     logIn,
-    updateProfile,
+    updatePassword,
     createExpense, 
     getExpenseByDate,
     updateExpense,
@@ -8,7 +8,8 @@ const {signUp,
     expStatisticByMonth,
     monthlyStatistic,
     savingStatisticByMonth,
-    checkExpenseExist} = require("../controllers/userController");
+    checkExpenseExist,
+    updateOthers} = require("../controllers/userController");
 
 const routes = (app)=>{
     app.route('/signup')
@@ -17,8 +18,8 @@ const routes = (app)=>{
     app.route('/login')
     .post(logIn);
 
-    app.route('/updateProfile/:userId')
-    .put(updateProfile);
+    app.route('/updatePassword/:userId')
+    .put(updatePassword);
 
     app.route('/addExpense')
     .post(createExpense);
@@ -43,6 +44,9 @@ const routes = (app)=>{
 
     app.route('/checkExpenseExist')
     .post(checkExpenseExist )
+
+    app.route('/updateOthers/:userId')
+    .put(updateOthers)
     
 };
 module.exports= routes;
